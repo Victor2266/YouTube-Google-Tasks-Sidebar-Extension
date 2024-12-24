@@ -1,40 +1,64 @@
-function createSidebar() {
-    // Check if the sidebar already exists
-    if (document.getElementById('tasks-sidebar')) {
-      return;
-    }
-  
-    // Create the sidebar container
+async function createTasksSidebar() {
+    // Create sidebar container
     const sidebar = document.createElement('div');
-    sidebar.id = 'tasks-sidebar';
-  
-    // Create an iframe to embed Google Tasks (Full UI)
-    const tasksFrame = document.createElement('iframe');
-    tasksFrame.src = 'https://tasks.google.com/'; // Embed the full Tasks UI
-    tasksFrame.style.width = '100%';
-    tasksFrame.style.height = '100%';
-    tasksFrame.style.border = 'none';
-  
-    sidebar.appendChild(tasksFrame);
+    sidebar.className = 'tasks-sidebar';
+    sidebar.innerHTML = `
+      <h2>My Tasks</h2>
+      <div id="tasks-list">
+        <div class="loading-spinner">Loading tasks...</div>
+      </div>
+    `;
     document.body.appendChild(sidebar);
   
-    // Adjust the YouTube content to make space for the sidebar
-    const content = document.getElementById('page-manager'); // You might need to adjust this selector based on YouTube's layout
+    // Adjust main content
+    const content = document.querySelector('ytd-app');
     if (content) {
-      content.style.marginRight = '300px'; // Adjust the margin based on your sidebar width
+      content.style.marginRight = '350px';
+    }
+  
+    try {
+      // Get tasks from background script
+      chrome.runtime.sendMessage({ action: 'getTasks' }, response => {
+        if (response.error) {
+          showError(response.error);
+        } else if (response.tasks) {
+          displayTasks(response.tasks);
+        } else {
+          showError('Unable to load tasks. Please try signing in again.');
+        }
+      });
+    } catch (error) {
+      showError('Failed to communicate with the extension. Please try reloading the page.');
     }
   }
   
-  // Call the function to create the sidebar when the page loads
-  window.addEventListener('load', createSidebar);
+  function showError(message) {
+    const tasksList = document.getElementById('tasks-list');
+    tasksList.innerHTML = `
+      <div class="error-message">
+        ${message}
+        <br>
+        <button onclick="location.reload()">Retry</button>
+      </div>
+    `;
+  }
   
-  // Mutation Observer to handle YouTube's dynamic content loading
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (!document.getElementById('tasks-sidebar') && window.location.pathname === '/') {
-        createSidebar();
-      }
+  function displayTasks(tasks) {
+    const tasksList = document.getElementById('tasks-list');
+    
+    if (!tasks || tasks.length === 0) {
+      tasksList.innerHTML = '<p>No tasks found</p>';
+      return;
+    }
+  
+    tasksList.innerHTML = '';
+    tasks.forEach(task => {
+      const taskElement = document.createElement('div');
+      taskElement.className = `task-item ${task.completed ? 'task-completed' : ''}`;
+      taskElement.textContent = task.title || 'Untitled Task';
+      tasksList.appendChild(taskElement);
     });
-  });
+  }
   
-  observer.observe(document.body, { childList: true, subtree: true });
+  // Wait for YouTube to load
+  window.addEventListener('load', createTasksSidebar);

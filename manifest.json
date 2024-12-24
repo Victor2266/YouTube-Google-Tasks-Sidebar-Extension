@@ -1,18 +1,30 @@
 {
     "manifest_version": 3,
-    "name": "YouTube Google Tasks Sidebar",
+    "name": "YouTube Tasks Sidebar",
     "version": "1.0",
-    "description": "Adds a sidebar to the YouTube homepage displaying your Google Tasks.",
+    "description": "Displays Google Tasks in a sidebar on YouTube homepage",
     "permissions": [
-      "activeTab",
-      "storage",
-      "https://tasks.google.com/*"
+      "identity",
+      "storage"
     ],
+    "host_permissions": [
+      "https://www.googleapis.com/tasks/v1/*",
+      "https://www.youtube.com/*"
+    ],
+    "oauth2": {
+      "client_id": "92363602716-bj2iojrgecl739213p1hl8c4fp4683pt.apps.googleusercontent.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/tasks.readonly"
+      ]
+    },
     "content_scripts": [
       {
         "matches": ["https://www.youtube.com/"],
-        "js": ["content.js"],
-        "css": ["styles.css"]
+        "css": ["styles.css"],
+        "js": ["content.js"]
       }
-    ]
+    ],
+    "background": {
+      "service_worker": "background.js"
+    }
   }
