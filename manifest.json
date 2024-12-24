@@ -4,27 +4,33 @@
     "version": "1.0",
     "description": "Displays Google Tasks in a sidebar on YouTube homepage",
     "permissions": [
-      "identity",
-      "storage"
+        "identity",
+        "storage"
     ],
     "host_permissions": [
-      "https://www.googleapis.com/tasks/v1/*",
-      "https://www.youtube.com/*"
+        "https://www.googleapis.com/tasks/v1/*",
+        "https://www.youtube.com/*"
     ],
     "oauth2": {
-      "client_id": "92363602716-bj2iojrgecl739213p1hl8c4fp4683pt.apps.googleusercontent.com",
-      "scopes": [
-        "https://www.googleapis.com/auth/tasks"
-      ]
+        "client_id": "92363602716-bj2iojrgecl739213p1hl8c4fp4683pt.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/tasks"
+        ]
     },
     "content_scripts": [
-      {
-        "matches": ["https://www.youtube.com/"],
-        "css": ["styles.css"],
-        "js": ["content.js"]
-      }
+        {
+            "matches": [
+                "https://www.youtube.com/"
+            ],
+            "css": [
+                "styles.css"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
     ],
     "background": {
-      "service_worker": "background.js"
+        "service_worker": "background.js"
     }
-  }
+}
