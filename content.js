@@ -72,16 +72,18 @@ function displayTasks(tasks) {
     const tasksList = document.getElementById('tasks-list');
     const tasksCount = document.getElementById('tasks-count');
 
-    if (!tasks || tasks.length === 0) {
+    const uncompletedTasks = tasks.filter(task => !task.completed); // Filter out completed tasks for display
+
+    if (!uncompletedTasks || uncompletedTasks.length === 0) {
         tasksList.innerHTML = '<div class="task-item">No tasks found</div>';
         tasksCount.textContent = '0 tasks';
         return;
     }
 
-    tasksCount.textContent = `${tasks.length} tasks`;
+    tasksCount.textContent = `${uncompletedTasks.length} tasks`;
     tasksList.innerHTML = '';
 
-    tasks.forEach(task => {
+    uncompletedTasks.forEach(task => {
         const taskElement = document.createElement('div');
         taskElement.className = `task-item ${task.completed ? 'task-completed' : ''}`;
         taskElement.dataset.taskId = task.id;

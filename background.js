@@ -144,15 +144,16 @@ async function getAllTasks() {
         console.log(`Retrieved ${tasks ? tasks.length : 0} tasks`);
 
         return tasks
-            .filter(task => !task.deleted && !task.hidden && task.status !== 'completed') // Filter out deleted, hidden and completed tasks
+            .filter(task => !task.deleted && !task.hidden) // Keep completed tasks for accurate ordering, filter in content.js
             .map(task => ({
                 id: task.id,
                 listId: firstList.id,
                 title: task.title,
                 completed: task.status === 'completed',
                 due: task.due,
-                position: task.position
-            }));
+                position: task.position // Keep the position
+            }))
+            .sort((a, b) => a.position.localeCompare(b.position)); // Sort by position
     } catch (error) {
         console.error('Error fetching all tasks:', error);
         throw error;
