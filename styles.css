@@ -222,6 +222,12 @@
     transform: translateX(100%);
 }
 
+.task-star {
+    margin-left: 8px;
+    color: #ffc107; /* Example: Yellow color for the star */
+    font-size: 14px; /* Adjust size as needed */
+}
+
 ytd-app {
     transition: margin-right 0.3s ease-out;
 }

@@ -90,11 +90,12 @@ function displayTasks(tasks) {
         taskElement.dataset.listId = task.listId;
 
         const dueDate = task.due ? new Date(task.due).toLocaleDateString() : '';
+        const starIcon = task.starred ? '<span class="task-star">⭐</span>' : ''; // Add star icon if starred
 
         taskElement.innerHTML = `
         <div class="task-checkbox"></div>
         <span class="task-title">${task.title || 'Untitled Task'}</span>
-        ${dueDate ? `<span class="task-due">${dueDate}</span>` : ''}
+        ${starIcon} ${dueDate ? `<span class="task-due">${dueDate}</span>` : ''}
       `;
 
         const checkbox = taskElement.querySelector('.task-checkbox');
