@@ -11,34 +11,38 @@ async function createTasksSidebar() {
       </div>
     `;
     document.body.appendChild(sidebar);
-
+  
     const content = document.querySelector('ytd-app');
     if (content) {
-        content.style.marginRight = '400px';
+      content.style.marginRight = '400px';
     }
-
+  
+    loadTasks();
+  }
+  
+  function loadTasks() {
     try {
-        chrome.runtime.sendMessage({ action: 'getTasks' }, response => {
-            if (response.error) {
-                showError(response.error);
-            } else if (response.tasks) {
-                displayTasks(response.tasks);
-            } else {
-                showError('Unable to load tasks. Please try signing in again.');
-            }
-        });
+      chrome.runtime.sendMessage({ action: 'getTasks' }, response => {
+        if (response.error) {
+          showError(response.error);
+        } else if (response.tasks) {
+          displayTasks(response.tasks);
+        } else {
+          showError('Unable to load tasks. Please try signing in again.');
+        }
+      });
     } catch (error) {
-        showError('Failed to communicate with the extension. Please try reloading the page.');
+      showError('Failed to communicate with the extension. Please try reloading the page.');
     }
-}
-
-function showError(message) {
+  }
+  
+  function showError(message) {
     const tasksList = document.getElementById('tasks-list');
     tasksList.innerHTML = `
       <div class="error-message">
         ${message}
         <br>
-        <button class="retry-button" onclick="location.reload()">Retry</button>
+        <button class="retry-button" onclick="loadTasks()">Retry</button>
       </div>
     `;
   }
@@ -59,6 +63,8 @@ function showError(message) {
     tasks.forEach(task => {
       const taskElement = document.createElement('div');
       taskElement.className = `task-item ${task.completed ? 'task-completed' : ''}`;
+      taskElement.dataset.taskId = task.id;
+      taskElement.dataset.listId = task.listId;
       
       const dueDate = task.due ? new Date(task.due).toLocaleDateString() : '';
       
@@ -68,9 +74,36 @@ function showError(message) {
         ${dueDate ? `<span class="task-due">${dueDate}</span>` : ''}
       `;
       
+      const checkbox = taskElement.querySelector('.task-checkbox');
+      checkbox.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleTask(task.listId, task.id, !task.completed);
+      });
+      
       tasksList.appendChild(taskElement);
     });
   }
-
-// Wait for YouTube to load
-window.addEventListener('load', createTasksSidebar);
+  
+  function toggleTask(listId, taskId, completed) {
+    const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+    if (taskElement) {
+      taskElement.classList.toggle('task-completed', completed);
+    }
+  
+    chrome.runtime.sendMessage({
+      action: 'updateTask',
+      listId: listId,
+      taskId: taskId,
+      completed: completed
+    }, response => {
+      if (response.error) {
+        showError(response.error);
+        // Revert UI change if update failed
+        if (taskElement) {
+          taskElement.classList.toggle('task-completed', !completed);
+        }
+      }
+    });
+  }
+  
+  window.addEventListener('load', createTasksSidebar);

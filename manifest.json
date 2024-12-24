@@ -14,7 +14,7 @@
     "oauth2": {
       "client_id": "92363602716-bj2iojrgecl739213p1hl8c4fp4683pt.apps.googleusercontent.com",
       "scopes": [
-        "https://www.googleapis.com/auth/tasks.readonly"
+        "https://www.googleapis.com/auth/tasks"
       ]
     },
     "content_scripts": [
