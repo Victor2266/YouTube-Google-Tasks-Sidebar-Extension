@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube Google Tasks Sidebar",
+    "version": "1.0",
+    "description": "Adds a sidebar to the YouTube homepage displaying your Google Tasks.",
+    "permissions": [
+      "activeTab",
+      "storage",
+      "https://tasks.google.com/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["https://www.youtube.com/"],
+        "js": ["content.js"],
+        "css": ["styles.css"]
+      }
+    ]
+  }

@@ -1,0 +1,11 @@
+#tasks-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px; /* Adjust the width as needed */
+    height: 100%;
+    background-color: #f9f9f9; /* Light gray background */
+    border-left: 1px solid #ccc;
+    z-index: 9999; /* Ensure it's on top of other elements */
+    overflow: hidden; /* Hide scrollbars on the sidebar itself */
+  }
