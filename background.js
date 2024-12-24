@@ -144,7 +144,7 @@ async function getAllTasks() {
         console.log(`Retrieved ${tasks ? tasks.length : 0} tasks`);
 
         return tasks
-            .filter(task => !task.deleted && !task.hidden) // Filter out deleted and hidden tasks
+            .filter(task => !task.deleted && !task.hidden && task.status !== 'completed') // Filter out deleted, hidden and completed tasks
             .map(task => ({
                 id: task.id,
                 listId: firstList.id,
