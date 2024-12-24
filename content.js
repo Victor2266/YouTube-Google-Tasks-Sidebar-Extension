@@ -1,4 +1,11 @@
 async function createTasksSidebar() {
+    // Create toggle button
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'tasks-toggle-button';
+    toggleButton.innerHTML = '◀ Tasks';
+    toggleButton.setAttribute('aria-label', 'Toggle Tasks Sidebar');
+    document.body.appendChild(toggleButton);
+
     const sidebar = document.createElement('div');
     sidebar.className = 'tasks-sidebar';
     sidebar.innerHTML = `
@@ -12,10 +19,24 @@ async function createTasksSidebar() {
     `;
     document.body.appendChild(sidebar);
 
+    // Initialize sidebar state
     const content = document.querySelector('ytd-app');
-    if (content) {
-        content.style.marginRight = '400px';
+    let isSidebarVisible = true;
+
+    // Toggle function
+    function toggleSidebar() {
+        isSidebarVisible = !isSidebarVisible;
+        sidebar.classList.toggle('tasks-sidebar-hidden', !isSidebarVisible);
+        toggleButton.classList.toggle('tasks-toggle-button-collapsed', !isSidebarVisible);
+        toggleButton.innerHTML = isSidebarVisible ? '◀ Tasks' : 'Tasks ▶';
+        
+        if (content) {
+            content.style.marginRight = isSidebarVisible ? '400px' : '0';
+        }
     }
+
+    // Add click event listener
+    toggleButton.addEventListener('click', toggleSidebar);
 
     loadTasks();
 }

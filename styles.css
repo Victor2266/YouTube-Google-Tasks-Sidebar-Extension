@@ -9,6 +9,7 @@
     z-index: 2000;
     overflow-y: auto;
     font-family: "Roboto", sans-serif;
+    transition: transform 0.3s ease-out;
 }
 
 .tasks-header {
@@ -187,4 +188,40 @@
 .task-item:not(.task-completed) .task-checkbox::after {
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
+}
+
+.tasks-toggle-button {
+    position: fixed;
+    right: 400px;
+    top: 66px;
+    background: #3ea6ff;
+    color: #0f0f0f;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 18px 0 0 18px;
+    cursor: pointer;
+    z-index: 2001;
+    transition: right 0.3s ease-out;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+}
+
+.tasks-toggle-button:hover {
+    background: #65b8ff;
+}
+
+.tasks-toggle-button-collapsed {
+    right: 0;
+}
+
+.tasks-sidebar {
+    transition: transform 0.3s ease-out;
+}
+
+.tasks-sidebar-hidden {
+    transform: translateX(100%);
+}
+
+ytd-app {
+    transition: margin-right 0.3s ease-out;
 }
