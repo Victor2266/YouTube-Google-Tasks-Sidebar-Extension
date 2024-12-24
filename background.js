@@ -152,7 +152,6 @@ async function getAllTasks() {
                 completed: task.status === 'completed',
                 due: task.due,
                 position: task.position, // Keep the position
-                starred: task.starred
             }))
             .sort((a, b) => a.position.localeCompare(b.position)); // Sort by position
     } catch (error) {
