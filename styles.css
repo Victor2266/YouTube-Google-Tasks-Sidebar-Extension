@@ -125,3 +125,7 @@
   .retry-button:hover {
     background: #65b8ff;
   }
+
+  .task-checkbox {
+    cursor: pointer;
+  }
