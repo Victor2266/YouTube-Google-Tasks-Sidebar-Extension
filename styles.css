@@ -214,10 +214,6 @@
     right: 0;
 }
 
-.tasks-sidebar {
-    transition: transform 0.3s ease-out;
-}
-
 .tasks-sidebar-hidden {
     transform: translateX(100%);
 }
