@@ -4,7 +4,7 @@
     top: 56px;
     width: 400px;
     height: calc(100vh - 56px);
-    background: #0f0f0f;
+    background: #0f0f0fe6;
     color: #fff;
     z-index: 2000;
     overflow-y: auto;
